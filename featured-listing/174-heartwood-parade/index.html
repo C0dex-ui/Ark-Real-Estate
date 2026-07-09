@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>174 Heartwood Parade SE, Calgary, Alberta T2S0Z5 — Ark Real Estate</title>
+    <!-- Fonts — matched to ark.thedailyscratch.blog -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        /* Force parent Elementor HTML widget wrappers to stretch full width */
+        .elementor-element:has(#ark-single-listing),
+        .elementor-element:has(.ark-floorplans-section),
+        .elementor-widget:has(#ark-single-listing),
+        .elementor-widget:has(.ark-floorplans-section),
+        .elementor-widget-container:has(#ark-single-listing),
+        .elementor-widget-container:has(.ark-floorplans-section),
+        .elementor-widget-html:has(#ark-single-listing),
+        .elementor-widget-html:has(.ark-floorplans-section) {
+            width: 100% !important;
+            max-width: 100% !important;
+            display: block !important;
+        }
+
+        /* ============================================
+           ARK Real Estate Design System
+           Matched to: ark.thedailyscratch.blog
+           Accent: #c57959 (terracotta)
+           Headings: Cormorant Garamond
+           Body: Montserrat
+           ============================================ */
+        :root {
+            --font-heading: "Cormorant Garamond", Georgia, serif;
+            --font-body: "Montserrat", "Lato", "Helvetica Neue", sans-serif;
+            --color-accent: #c57959;
+            --color-accent-dark: #a8603f;
+            --color-fg: #1a1a1a;
+            --color-muted: #6b6b6b;
+            --color-light: #8a8a8a;
+            --color-border: #e0d8d0;
+            --color-border-soft: #ece6de;
+            --color-bg-warm: #f2ebe3;
+            --color-bg-cream: #faf7f4;
+            --color-bg-dark: #1a1a1a;
+            --color-sold: #8b2500;
+            --radius: 0px;
+            --tracking: 0.18em;
+            --tracking-wide: 0.22em;
+        }
+        body {
+            margin: 0; background: #fff;
+            font-family: var(--font-body); color: var(--color-fg);
+            font-weight: 300; line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        h1, h2, h3, h4 { font-family: var(--font-heading); }
+        *, *::before, *::after { box-sizing: border-box; }
+
+        /* ===== PHOTO GALLERY ===== */
+        .ark-sl-gallery { position: relative; background: #111; }
+        .ark-sl-swiper-main { width: 100%; height: 520px; }
+        .ark-sl-swiper-main .swiper-slide img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .ark-sl-swiper-main .swiper-button-next,
+        .ark-sl-swiper-main .swiper-button-prev {
+            color: #fff; background: rgba(0,0,0,0.45);
+            width: 48px; height: 48px; border-radius: var(--radius);
+            backdrop-filter: blur(4px); transition: background 0.2s;
+        }
+        .ark-sl-swiper-main .swiper-button-next:hover,
+        .ark-sl-swiper-main .swiper-button-prev:hover { background: rgba(0,0,0,0.7); }
+        .ark-sl-swiper-main .swiper-button-next::after,
+        .ark-sl-swiper-main .swiper-button-prev::after { font-size: 18px; font-weight: bold; }
+        .ark-sl-swiper-main .swiper-pagination-bullet-active { background: var(--color-accent) !important; }
+
+        .ark-sl-gallery-badge {
+            position: absolute; top: 24px; left: 24px; z-index: 10;
+            font-family: var(--font-body); font-weight: 600; text-transform: uppercase;
+            font-size: 10px; letter-spacing: var(--tracking);
+            padding: 8px 18px; border-radius: var(--radius);
+        }
+        .ark-sl-gallery-badge.active { background: var(--color-accent); color: #fff; }
+        .ark-sl-gallery-badge.sold { background: var(--color-sold); color: #fff; }
+
+        .ark-sl-gallery-count {
+            position: absolute; bottom: 24px; right: 24px; z-index: 10;
+            background: rgba(0,0,0,0.6); color: #fff;
+            padding: 10px 22px; font-family: var(--font-body);
+            font-size: 11px; font-weight: 400; letter-spacing: var(--tracking);
+            text-transform: uppercase; border-radius: var(--radius);
+            cursor: pointer; transition: background 0.3s;
+            text-decoration: none; backdrop-filter: blur(4px);
+        }
+        .ark-sl-gallery-count:hover { background: rgba(0,0,0,0.85); }
+
+        /* Lightbox */
+        .ark-sl-lightbox {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 9999;
+            align-items: center; justify-content: center;
+        }
+        .ark-sl-lightbox.open { display: flex; }
+        .ark-sl-lightbox-close {
+            position: absolute; top: 24px; right: 24px;
+            color: #fff; font-size: 32px; cursor: pointer;
+            background: none; border: none; font-family: var(--font-body);
+            z-index: 10000; width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .ark-sl-lightbox .swiper { width: 90vw; height: 85vh; }
+        .ark-sl-lightbox .swiper-slide img { width: 100%; height: 100%; object-fit: contain; }
+        .ark-sl-lightbox .swiper-button-next, .ark-sl-lightbox .swiper-button-prev { color: #fff; }
+        .ark-sl-lightbox .swiper-pagination-bullet { background: rgba(255,255,255,0.5); }
+        .ark-sl-lightbox .swiper-pagination-bullet-active { background: #fff !important; }
+        .ark-sl-lightbox-counter {
+            position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+            color: rgba(255,255,255,0.6); font-size: 13px; letter-spacing: 0.1em;
+        }
+
+        /* ===== LISTING HEADER ===== */
+        .ark-sl-header {
+            background: var(--color-bg-warm);
+            border-bottom: 1px solid var(--color-border);
+            padding: 32px 0;
+        }
+        .ark-header-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; justify-content: space-between;
+            align-items: flex-start; flex-wrap: wrap; gap: 20px;
+        }
+        .ark-sl-status { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+        .ark-status-pill {
+            display: inline-block; font-family: var(--font-body);
+            font-weight: 600; text-transform: uppercase; font-size: 10px;
+            letter-spacing: var(--tracking); padding: 5px 14px;
+            border-radius: var(--radius);
+        }
+        .ark-status-pill.active { background: var(--color-accent); color: #fff; }
+        .ark-status-pill.sold { background: var(--color-sold); color: #fff; }
+        .ark-mls-num {
+            font-size: 12px; color: var(--color-muted);
+            letter-spacing: 0.12em; text-transform: uppercase;
+        }
+        .ark-listing-title {
+            font-size: 36px; font-weight: 600; color: var(--color-fg);
+            margin: 0 0 4px; line-height: 1.1;
+        }
+        .ark-listing-subtitle {
+            font-size: 14px; color: var(--color-muted); font-weight: 400;
+        }
+        .ark-header-right { text-align: right; }
+        .ark-listing-price {
+            font-family: var(--font-heading); font-size: 40px;
+            font-weight: 600; color: var(--color-fg);
+            line-height: 1; margin-bottom: 6px;
+        }
+        .ark-price-note {
+            font-size: 11px; color: var(--color-muted);
+            text-transform: uppercase; letter-spacing: var(--tracking);
+        }
+
+        /* ===== SPECS BAR ===== */
+        .ark-sl-specs {
+            background: #fff; border-bottom: 1px solid var(--color-border); padding: 24px 0;
+        }
+        .ark-specs-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; gap: 48px; flex-wrap: wrap;
+        }
+        .ark-spec-item { text-align: center; }
+        .ark-spec-value {
+            font-family: var(--font-body); font-size: 22px; font-weight: 600;
+            color: var(--color-fg); display: block; line-height: 1; margin-bottom: 6px;
+        }
+        .ark-spec-label {
+            font-size: 11px; color: var(--color-muted);
+            text-transform: uppercase; letter-spacing: var(--tracking);
+        }
+
+        /* ===== CTA ROW ===== */
+        .ark-cta-row {
+            background: #fff; border-bottom: 1px solid var(--color-border); padding: 20px 0;
+        }
+        .ark-cta-inner {
+            max-width: 1200px; margin: 0 auto; padding: 0 24px;
+            display: flex; gap: 12px; flex-wrap: wrap;
+        }
+        .ark-cta-btn {
+            display: inline-block; padding: 14px 32px;
+            font-family: var(--font-body); font-size: 11px; font-weight: 500;
+            letter-spacing: var(--tracking); text-transform: uppercase;
+            text-decoration: none; text-align: center;
+            border-radius: var(--radius); transition: all 0.3s; cursor: pointer;
+        }
+        .ark-cta-btn.primary {
+            background: var(--color-accent); color: #fff; border: 1px solid var(--color-accent);
+        }
+        .ark-cta-btn.primary:hover { background: var(--color-accent-dark); border-color: var(--color-accent-dark); }
+        .ark-cta-btn.secondary {
+            background: transparent; color: var(--color-fg); border: 1px solid var(--color-fg);
+        }
+        .ark-cta-btn.secondary:hover { background: var(--color-fg); color: #fff; }
+
+        /* ===== MAIN CONTENT (2-col) ===== */
+        .ark-sl-main {
+            max-width: 1200px; margin: 0 auto; padding: 64px 24px 80px;
+            display: grid; grid-template-columns: 1fr 380px; gap: 64px;
+        }
+
+        /* Section titles (eyebrow) */
+        .ark-section-title {
+            font-family: var(--font-body); font-size: 11px; font-weight: 500;
+            color: var(--color-accent); text-transform: uppercase;
+            letter-spacing: 0.25em; margin: 0 0 20px;
+            padding-bottom: 12px; border-bottom: 1px solid var(--color-border);
+            display: block;
+        }
+
+        /* Remarks */
+        .ark-remarks {
+            font-size: 15px; line-height: 1.8; color: var(--color-muted);
+            font-weight: 300; margin-bottom: 64px;
+        }
+
+        /* Features checklist */
+        .ark-features-section { margin-bottom: 64px; }
+        .ark-features-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0;
+        }
+        .ark-feature-item {
+            display: flex; align-items: center; gap: 12px;
+            font-size: 14px; color: var(--color-fg); font-weight: 400;
+            padding: 14px 0; border-bottom: 1px solid var(--color-border-soft);
+        }
+        .ark-feature-check {
+            color: var(--color-accent); font-size: 12px; font-weight: 700; flex-shrink: 0;
+            width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+            background: rgba(197, 121, 89, 0.1); border-radius: 50%;
+        }
+
+        /* Floor Plans */
+        .ark-floorplans-section {
+            margin-bottom: 64px;
+            width: 100% !important;
+            max-width: 100% !important;
+            display: block !important;
+            box-sizing: border-box !important;
+        }
+        .ark-sl-fp-tabs {
+            display: flex !important;
+            width: 100% !important;
+            gap: 0;
+            margin-bottom: -1px;
+            border-bottom: none;
+            position: relative;
+            z-index: 1;
+        }
+        .ark-sl-fp-tab {
+            padding: 14px 28px 16px;
+            font-family: var(--font-body);
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: var(--tracking);
+            text-transform: uppercase;
+            color: var(--color-muted);
+            cursor: pointer;
+            border: none;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+            background: none;
+            outline: none;
+        }
+        .ark-sl-fp-tab:hover { color: var(--color-accent); }
+        .ark-sl-fp-tab.active {
+            color: var(--color-accent);
+            border-bottom-color: var(--color-accent);
+            font-weight: 500;
+        }
+        .ark-sl-fp-panel {
+            display: none;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            background: var(--color-bg-cream);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius);
+            padding: 80px 20px;
+            text-align: center;
+            color: var(--color-muted);
+            font-size: 14px;
+            font-style: italic;
+        }
+        .ark-sl-fp-panel.active { display: block !important; }
+        .ark-sl-fp-panel img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .ark-sl-fp-panel:has(img),
+        .ark-sl-fp-panel:has(iframe),
+        .ark-sl-fp-panel:has(svg),
+        .ark-sl-fp-panel:has(.full-width) {
+            padding: 0;
+        }
+
+        /* Location */
+        .ark-location-section { margin-bottom: 64px; }
+        .ark-sl-map {
+            background: var(--color-bg-warm); border: 1px solid var(--color-border);
+            border-radius: var(--radius); height: 220px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--color-muted); font-size: 14px; font-style: italic;
+            margin-bottom: 24px;
+        }
+        .ark-sl-nearby-title {
+            font-family: var(--font-body); font-size: 11px; font-weight: 500;
+            text-transform: uppercase; letter-spacing: var(--tracking);
+            color: var(--color-accent); margin: 0 0 12px;
+        }
+        .ark-sl-nearby { list-style: none; padding: 0; margin: 0; }
+        .ark-sl-nearby li {
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-bottom: 1px solid var(--color-border-soft);
+            font-size: 14px; color: var(--color-muted);
+        }
+        .ark-sl-nearby li:last-child { border-bottom: none; }
+        .ark-sl-nearby-time { color: var(--color-fg); font-weight: 600; font-size: 13px; }
+
+        /* ===== SIDEBAR ===== */
+        .ark-sl-right { display: flex; flex-direction: column; gap: 28px; }
+
+        .ark-facts-card {
+            background: var(--color-bg-cream); border-radius: var(--radius);
+            padding: 28px; border: 1px solid var(--color-border);
+        }
+        .ark-fact-item {
+            display: flex; justify-content: space-between; padding: 11px 0;
+            border-bottom: 1px solid var(--color-border-soft); font-size: 14px;
+        }
+        .ark-fact-item:last-child { border-bottom: none; padding-bottom: 0; }
+        .ark-fact-label { font-weight: 400; color: var(--color-muted); }
+        .ark-fact-value { font-weight: 600; color: var(--color-fg); }
+
+        .ark-sl-agent-rows-card {
+            background: #fff; border-radius: var(--radius);
+            padding: 28px; border: 1px solid var(--color-border);
+        }
+        .ark-sl-agent-row { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+        .ark-sl-agent-row:last-of-type { margin-bottom: 0; }
+        .ark-sl-agent-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            background: var(--color-bg-warm);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--color-accent); font-size: 16px; font-weight: 600; flex-shrink: 0;
+        }
+        .ark-sl-agent-name { font-weight: 600; color: var(--color-fg); font-size: 14px; margin-bottom: 2px; }
+        .ark-sl-agent-role {
+            font-size: 11px; color: var(--color-muted);
+            letter-spacing: 0.12em; text-transform: uppercase;
+        }
+        .ark-sl-agents-btns {
+            display: flex; gap: 8px; margin-top: 18px; padding-top: 16px;
+            border-top: 1px solid var(--color-border);
+        }
+        .ark-sl-agent-link {
+            font-family: var(--font-body); font-size: 11px; font-weight: 500;
+            letter-spacing: var(--tracking); text-transform: uppercase; text-decoration: none;
+            color: var(--color-accent); padding: 8px 16px;
+            border: 1px solid var(--color-accent); border-radius: var(--radius);
+            transition: all 0.3s;
+        }
+        .ark-sl-agent-link:hover { background: var(--color-accent); color: #fff; }
+
+        .ark-sl-contact {
+            background: var(--color-bg-dark); color: #fff;
+            border-radius: var(--radius); padding: 36px 28px; text-align: center;
+        }
+        .ark-contact-title {
+            font-family: var(--font-heading); font-size: 26px; font-weight: 600;
+            margin-bottom: 12px; line-height: 1.2;
+        }
+        .ark-contact-desc {
+            font-size: 14px; color: rgba(255,255,255,0.5);
+            margin-bottom: 24px; line-height: 1.7; font-weight: 300;
+        }
+        .ark-contact-btn {
+            display: block; background: var(--color-accent); color: #fff;
+            text-align: center; text-decoration: none; padding: 14px 20px;
+            border-radius: var(--radius); font-family: var(--font-body);
+            font-weight: 500; font-size: 11px; text-transform: uppercase;
+            letter-spacing: var(--tracking); transition: all 0.3s;
+        }
+        .ark-contact-btn:hover { background: var(--color-accent-dark); }
+
+        /* ===== PRE-FOOTER CTA ===== */
+        .ark-prefooter {
+            background: var(--color-bg-dark); padding: 80px 24px; text-align: center;
+        }
+        .ark-prefooter-title {
+            font-family: var(--font-heading); font-size: 42px; font-weight: 600;
+            color: #fff; margin: 0 0 14px; line-height: 1.1;
+        }
+        .ark-prefooter-desc {
+            font-size: 15px; color: rgba(255,255,255,0.5);
+            margin-bottom: 32px; font-weight: 300;
+        }
+        .ark-sl-pf-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+        .ark-prefooter .ark-cta-btn.primary {
+            background: var(--color-accent); color: #fff; border-color: var(--color-accent);
+        }
+        .ark-prefooter .ark-cta-btn.primary:hover {
+            background: #fff; color: var(--color-fg); border-color: #fff;
+        }
+        .ark-prefooter .ark-cta-btn.secondary {
+            background: transparent; color: rgba(255,255,255,0.7);
+            border-color: rgba(255,255,255,0.25);
+        }
+        .ark-prefooter .ark-cta-btn.secondary:hover {
+            background: rgba(255,255,255,0.08); color: #fff;
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 991px) {
+            .ark-sl-swiper-main { height: 380px; }
+            .ark-sl-main { grid-template-columns: 1fr; gap: 40px; }
+            .ark-header-inner { flex-direction: column; }
+            .ark-header-right { text-align: left; }
+        }
+        @media (max-width: 768px) {
+            .ark-sl-swiper-main { height: 280px; }
+            .ark-listing-title { font-size: 28px; }
+            .ark-listing-price { font-size: 32px; }
+            .ark-specs-inner { gap: 24px; }
+            .ark-spec-value { font-size: 18px; }
+            .ark-features-grid { grid-template-columns: 1fr; }
+            .ark-sl-main { padding: 40px 16px 60px; }
+            .ark-prefooter { padding: 60px 16px; }
+            .ark-prefooter-title { font-size: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="ark-single-listing">
+
+    <!-- ===== PHOTO GALLERY ===== -->
+    <div class="ark-sl-gallery">
+        <div class="ark-sl-gallery-badge active">Active</div>
+        <a href="javascript:void(0)" class="ark-sl-gallery-count" id="arkGalleryBtn">View all 14 photos</a>
+        <div class="swiper ark-sl-swiper-main">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-01.jpg" alt="174 Heartwood Parade SE - Photo 1"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-02.jpg" alt="174 Heartwood Parade SE - Photo 2"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-03.jpg" alt="174 Heartwood Parade SE - Photo 3"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-04.jpg" alt="174 Heartwood Parade SE - Photo 4"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-05.jpg" alt="174 Heartwood Parade SE - Photo 5"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-06.jpg" alt="174 Heartwood Parade SE - Photo 6"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-07.jpg" alt="174 Heartwood Parade SE - Photo 7"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-08.jpg" alt="174 Heartwood Parade SE - Photo 8"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-09.jpg" alt="174 Heartwood Parade SE - Photo 9"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-10.jpg" alt="174 Heartwood Parade SE - Photo 10"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-11.jpg" alt="174 Heartwood Parade SE - Photo 11"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-12.jpg" alt="174 Heartwood Parade SE - Photo 12"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-13.jpg" alt="174 Heartwood Parade SE - Photo 13"></div>
+                <div class="swiper-slide"><img src="/resources/featured-images/ark-featured-174-heartwood-parade-14.jpg" alt="174 Heartwood Parade SE - Photo 14"></div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+        </div>
+    </div>
+
+    <!-- ===== LIGHTBOX ===== -->
+    <div class="ark-sl-lightbox" id="arkLightbox">
+        <button class="ark-sl-lightbox-close" id="arkLbClose">&times;</button>
+        <div class="swiper ark-sl-swiper-lb">
+            <div class="swiper-wrapper" id="arkLbSlides"></div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+        <div class="ark-sl-lightbox-counter"><span id="arkLbCur">1</span> / <span id="arkLbTot">14</span></div>
+    </div>
+
+    <!-- ===== LISTING HEADER ===== -->
+    <div class="ark-sl-header">
+        <div class="ark-header-inner">
+            <div class="ark-header-left">
+                <div class="ark-sl-status">
+                    <span class="ark-status-pill active">Active</span>
+                    <span class="ark-mls-num">MLS# A2321439</span>
+                </div>
+                <h1 class="ark-listing-title">174 Heartwood Parade SE</h1>
+                <div class="ark-listing-subtitle">Heartwood · SE Calgary</div>
+            </div>
+            <div class="ark-header-right">
+                <div class="ark-listing-price">$559,900</div>
+                <div class="ark-price-note">List Price</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== SPECS BAR ===== -->
+    <div class="ark-sl-specs">
+        <div class="ark-specs-inner">
+            <div class="ark-spec-item"><span class="ark-spec-value">3</span><span class="ark-spec-label">Beds</span></div>
+            <div class="ark-spec-item"><span class="ark-spec-value">3</span><span class="ark-spec-label">Baths</span></div>
+            <div class="ark-spec-item"><span class="ark-spec-value">1,506</span><span class="ark-spec-label">Sq Ft</span></div>
+            <div class="ark-spec-item"><span class="ark-spec-value">Double</span><span class="ark-spec-label">Parking</span></div>
+            <div class="ark-spec-item"><span class="ark-spec-value">2026</span><span class="ark-spec-label">Year Built</span></div>
+        </div>
+    </div>
+
+    <!-- ===== CTA ROW ===== -->
+    <div class="ark-cta-row">
+        <div class="ark-cta-inner">
+            <a href="/contact/" class="ark-cta-btn primary">Book a Showing</a>
+            <a href="/contact/" class="ark-cta-btn secondary">Request More Info</a>
+            <a href="https://www.realtor.ca/real-estate/A2321439" target="_blank" class="ark-cta-btn secondary">View on MLS</a>
+        </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div class="ark-sl-main">
+        <div class="ark-content-col">
+
+            <h2 class="ark-section-title">About This Property</h2>
+            <div class="ark-remarks">
+                Welcome to the Talo by Rohit Homes, a brand new detached home in the southeast Calgary community of Heartwood offering 3 bedrooms, 2.5 bathrooms, over 1,500 square feet of thoughtfully designed living space, a detached garage, side entrance, and full front and rear landscaping. Blending modern design, functional living, and professionally curated interiors, this pre-construction home presents an excellent opportunity for first-time buyers, growing families, and investors looking to secure a new home in one of Calgary's emerging southeast communities. Designed with everyday living in mind, the main floor features an open-concept layout that seamlessly connects the kitchen, dining, and living areas. At the heart of the home, the kitchen offers ceiling-height cabinetry, a built-in hood fan, built-in microwave, designer lighting, and a large central island that creates both workspace and a natural gathering place for family and friends. A rear mudroom with a built-in bench provides practical storage, while the powder room showcases a floating vanity that adds a modern, elevated touch. Upstairs, the primary suite serves as a private retreat complete with a walk-in closet and ensuite bathroom. Two additional bedrooms, a full bathroom, upper-level laundry, and a versatile central bonus space provide flexibility for a home office, study area, reading nook, or children's play space. Finished in Rohit Homes' Côte d'Azur designer interior package, this home is inspired by the timeless elegance and relaxed sophistication of the French Riviera. Thoughtfully curated finishes, designer lighting, LED illuminated mirrors, and a bright, airy palette create a refined yet welcoming atmosphere throughout. The result is a home that feels both stylish and comfortable, with a cohesive design aesthetic that carries through every room. The unfinished basement and separate side entrance provide additional flexibility for future development, allowing the space to evolve alongside your family's needs. Full Alberta New Home Warranty coverage is included for added peace of mind. Located in Heartwood, residents enjoy convenient access to South Health Campus, Seton YMCA, Calgary Public Library, shopping, restaurants, parks, pathways, and future schools. Combining designer interiors, a detached garage, side entrance, full landscaping, and the quality craftsmanship Rohit Homes is known for, the Talo offers exceptional value in one of southeast Calgary's fastest-growing communities. (32229795)
+            </div>
+
+            <div class="ark-features-section">
+                <h2 class="ark-section-title">Included Features</h2>
+                <div class="ark-features-grid">
+                    <div class="ark-feature-item"><span class="ark-feature-check">✓</span> Back lane</div>
+                    <div class="ark-feature-item"><span class="ark-feature-check">✓</span> PVC window</div>
+                    <div class="ark-feature-item"><span class="ark-feature-check">✓</span> No Animal Home</div>
+                    <div class="ark-feature-item"><span class="ark-feature-check">✓</span> No Smoking Home</div>
+                </div>
+            </div>
+
+            <div class="ark-floorplans-section">
+                <h2 class="ark-section-title">Floor Plans</h2>
+                <div style="padding: 40px 20px; text-align: center; color: var(--ark-muted); font-style: italic;">Floor plans coming soon</div>
+            </div>
+
+            <div class="ark-location-section">
+                <h2 class="ark-section-title">Location</h2>
+                <div class="ark-sl-map">Interactive map coming soon</div>
+                <h3 class="ark-sl-nearby-title">Nearby Amenities</h3>
+                <ul class="ark-sl-nearby">
+                    <li><span>Heartwood Community Parks</span> <span class="ark-sl-nearby-time">3 min walk</span></li>
+                    <li><span>South Health Campus</span> <span class="ark-sl-nearby-time">8 min drive</span></li>
+                    <li><span>Seton Shopping District</span> <span class="ark-sl-nearby-time">8 min drive</span></li>
+                    <li><span>Brookfield Residential YMCA</span> <span class="ark-sl-nearby-time">8 min drive</span></li>
+                    <li><span>Deerfoot Trail Access</span> <span class="ark-sl-nearby-time">5 min drive</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="ark-sl-right">
+            <!-- Quick Facts (NO Annual Taxes — removed per client request) -->
+            <div class="ark-facts-card">
+                <h2 class="ark-section-title" style="margin-bottom: 16px;">Quick Facts</h2>
+                <div class="ark-fact-item"><span class="ark-fact-label">MLS#</span><span class="ark-fact-value">A2321439</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Status</span><span class="ark-fact-value">Active</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Type</span><span class="ark-fact-value">Detached</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Beds</span><span class="ark-fact-value">3</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Baths</span><span class="ark-fact-value">3</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Size</span><span class="ark-fact-value">1,506 Sq Ft</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Community</span><span class="ark-fact-value">Heartwood</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Builder</span><span class="ark-fact-value">Rohit Homes</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Floorplan</span><span class="ark-fact-value">The Talo</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Possession</span><span class="ark-fact-value">Immediate</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Parking</span><span class="ark-fact-value">Double Detached</span></div>
+                <div class="ark-fact-item"><span class="ark-fact-label">Lot Size</span><span class="ark-fact-value">N/A</span></div>
+                <!-- ⚠️ NO Annual Taxes — removed per client request -->
+            </div>
+
+            <div class="ark-agents-card">
+                <h2 class="ark-section-title" style="margin-bottom: 16px;">Your ARK Agents</h2>
+                <div class="ark-sl-agent-row">
+                    <div class="ark-sl-agent-avatar">RK</div>
+                    <div><div class="ark-sl-agent-name">Rut Kaufman Aronovich</div><div class="ark-sl-agent-role">REALTOR®</div></div>
+                </div>
+                <div class="ark-sl-agent-row">
+                    <div class="ark-sl-agent-avatar">AK</div>
+                    <div><div class="ark-sl-agent-name">Anna Kaufman</div><div class="ark-sl-agent-role">REALTOR®</div></div>
+                </div>
+                <div class="ark-sl-agents-btns">
+                    <a href="tel:5878001605" class="ark-sl-agent-link">Call</a>
+                    <a href="mailto:Hello@arkrealestateteam.com" class="ark-sl-agent-link">Email</a>
+                    <a href="sms:5878001605" class="ark-sl-agent-link">Text</a>
+                </div>
+            </div>
+
+            <div class="ark-sl-contact">
+                <h3 class="ark-contact-title">Interested in This Home?</h3>
+                <p class="ark-contact-desc">Get in touch with ARK Real Estate for a private viewing or more information.</p>
+                <a href="/contact/" class="ark-contact-btn">Contact Us</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== PRE-FOOTER CTA ===== -->
+    <div class="ark-prefooter">
+        <h2 class="ark-prefooter-title">Ready to Make It Yours?</h2>
+        <p class="ark-prefooter-desc">Book a private showing or get in touch with our team today.</p>
+        <div class="ark-sl-pf-btns">
+            <a href="/contact/" class="ark-cta-btn primary">Book a Showing</a>
+            <a href="/contact/" class="ark-cta-btn secondary">Get in Touch</a>
+        </div>
+    </div>
+</div>
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // ======= GALLERY SWIPER =======
+    var mainSwiper = new Swiper('.ark-sl-swiper-main', {
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 0,
+        pagination: { el: '.ark-sl-swiper-main .swiper-pagination', clickable: true },
+        navigation: {
+            nextEl: '.ark-sl-swiper-main .swiper-button-next',
+            prevEl: '.ark-sl-swiper-main .swiper-button-prev'
+        },
+        autoplay: { delay: 5000, disableOnInteraction: false },
+        keyboard: { enabled: true }
+    });
+
+    // ======= LIGHTBOX =======
+    var lightboxSwiper = null;
+    var lb = document.getElementById('arkLightbox');
+    var lbSlidesContainer = document.getElementById('arkLbSlides');
+    var lbTotal = document.getElementById('arkLbTot');
+    var countBtn = document.getElementById('arkGalleryBtn');
+
+    // Build lightbox slides from gallery images
+    var galleryImages = document.querySelectorAll('.ark-sl-swiper-main .swiper-slide:not(.swiper-slide-duplicate) img');
+    var totalPhotos = galleryImages.length;
+    if (lbTotal) lbTotal.textContent = totalPhotos;
+    if (countBtn) countBtn.textContent = 'View all ' + totalPhotos + ' photos';
+
+    if (lbSlidesContainer) {
+        lbSlidesContainer.innerHTML = '';
+        galleryImages.forEach(function(img) {
+            var slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            var clonedImg = document.createElement('img');
+            clonedImg.src = img.src;
+            clonedImg.alt = img.alt;
+            slide.appendChild(clonedImg);
+            lbSlidesContainer.appendChild(slide);
+        });
+    }
+
+    function openLightbox(i) {
+        if (!lb) return;
+        lb.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        if (!lightboxSwiper) {
+            lightboxSwiper = new Swiper('.ark-sl-swiper-lb', {
+                loop: true,
+                slidesPerView: 1,
+                navigation: {
+                    nextEl: '.ark-sl-swiper-lb .swiper-button-next',
+                    prevEl: '.ark-sl-swiper-lb .swiper-button-prev'
+                },
+                keyboard: { enabled: true },
+                on: {
+                    slideChange: function() {
+                        var curEl = document.getElementById('arkLbCur');
+                        if (curEl) curEl.textContent = this.realIndex + 1;
+                    }
+                }
+            });
+        }
+        lightboxSwiper.slideTo(i, 0);
+        var curEl = document.getElementById('arkLbCur');
+        if (curEl) curEl.textContent = i + 1;
+    }
+
+    function closeLightbox() {
+        if (lb) lb.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    // Gallery count button
+    if (countBtn) {
+        countBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            openLightbox(0);
+        });
+    }
+
+    // Close button
+    var closeBtn = document.getElementById('arkLbClose');
+    if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+
+    // ESC key
+    document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLightbox(); });
+
+    // Click background to close
+    if (lb) {
+        lb.addEventListener('click', function(e) { if (e.target === this) closeLightbox(); });
+    }
+
+    // Click gallery images to open lightbox at that slide
+    document.querySelectorAll('.ark-sl-swiper-main .swiper-slide img').forEach(function(img) {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', function() {
+            var idx = mainSwiper.realIndex;
+            openLightbox(idx);
+        });
+    });
+
+    // Floor plan tabs
+    document.querySelectorAll('.ark-sl-fp-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            var target = this.getAttribute('data-tab');
+            document.querySelectorAll('.ark-sl-fp-tab').forEach(function(t) { t.classList.remove('active'); });
+            document.querySelectorAll('.ark-sl-fp-panel').forEach(function(p) { p.classList.remove('active'); });
+            this.classList.add('active');
+            var pnl = document.querySelector('.ark-sl-fp-panel[data-panel="' + target + '"]');
+            if (pnl) pnl.classList.add('active');
+        });
+    });
+});
+</script>
+</body>
+</html>
