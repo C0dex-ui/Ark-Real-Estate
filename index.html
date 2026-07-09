@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Featured Listings — Ark Real Estate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ============================================
+           ARK Real Estate Design System
+           Matched to: ark.thedailyscratch.blog
+           ============================================ */
+        :root {
+            --font-heading: "Cormorant Garamond", Georgia, serif;
+            --font-body: "Montserrat", "Lato", "Helvetica Neue", sans-serif;
+            --color-accent: #c57959;
+            --color-accent-light: #d4937a;
+            --color-fg: #1a1a1a;
+            --color-muted: #6b6b6b;
+            --color-light: #8a8a8a;
+            --color-border: #e0d8d0;
+            --color-border-soft: #ece6de;
+            --color-bg-warm: #f2ebe3;
+            --color-bg-cream: #faf7f4;
+            --color-bg-dark: #1a1a1a;
+            --color-sold: #8b2500;
+            --radius: 0px;
+            --tracking: 0.18em;
+        }
+        body {
+            margin: 0; background: #fff;
+            font-family: var(--font-body); color: var(--color-fg);
+            font-weight: 300; line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+
+        /* ===== PAGE HEADER ===== */
+        .ark-page-header {
+            text-align: center; padding: 80px 24px 56px;
+            background: var(--color-bg-warm);
+        }
+        .ark-page-tag {
+            font-family: var(--font-body);
+            font-size: 11px; font-weight: 500; text-transform: uppercase;
+            letter-spacing: 0.25em; color: var(--color-accent);
+            display: block; margin-bottom: 14px;
+        }
+        .ark-page-title {
+            font-family: var(--font-heading); font-size: 48px; font-weight: 600;
+            margin: 0 0 16px; color: var(--color-fg); line-height: 1.1;
+        }
+        .ark-page-desc {
+            font-size: 15px; color: var(--color-muted);
+            max-width: 600px; margin: 0 auto; line-height: 1.8; font-weight: 300;
+        }
+
+        /* ===== FILTER BAR ===== */
+        #ark-filter-bar {
+            max-width: 1200px; margin: -28px auto 24px; padding: 0 24px;
+            display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+            position: relative; z-index: 2;
+        }
+        .ark-fbtn {
+            font-family: var(--font-body); font-size: 11px; font-weight: 500;
+            letter-spacing: var(--tracking); text-transform: uppercase;
+            padding: 12px 24px; border: 1px solid var(--color-border);
+            border-radius: var(--radius); background: #fff;
+            color: var(--color-muted); cursor: pointer; transition: all 0.3s;
+        }
+        .ark-fbtn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+        .ark-fbtn.active { background: var(--color-accent); color: #fff; border-color: var(--color-accent); }
+        .ark-fbtn.no-items { opacity: 0.45; border-style: dashed; }
+        .ark-fbtn.no-items:hover { opacity: 0.7; }
+        .ark-fbtn.no-items.active { opacity: 1; }
+        .ark-fbtn .cnt {
+            display: inline-block; font-size: 9px; font-weight: 600;
+            background: rgba(0,0,0,0.06); color: #8a8a8a;
+            padding: 1px 6px; margin-left: 8px; min-width: 16px; text-align: center;
+        }
+        .ark-fbtn.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
+
+        /* ===== SUB FILTER BAR ===== */
+        #ark-sub-filter-bar {
+            display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+            margin: 0 auto 48px; max-width: 1200px; padding: 0 24px;
+            position: relative; z-index: 2;
+            transition: all 0.3s ease;
+        }
+        #ark-sub-filter-bar.ark-sub-hidden {
+            display: none !important;
+        }
+        #ark-sub-filter-bar .ark-sub-group {
+            display: none;
+            justify-content: center; gap: 8px; flex-wrap: wrap;
+            width: 100%;
+        }
+        #ark-sub-filter-bar .ark-sub-group.ark-active {
+            display: flex;
+        }
+        #ark-sub-filter-bar .ark-sub-btn {
+            font-family: var(--font-body); font-size: 10px; font-weight: 500;
+            letter-spacing: var(--tracking); text-transform: uppercase;
+            padding: 8px 16px; border: 1px solid var(--color-border-soft);
+            border-radius: var(--radius); background: var(--color-bg-cream); color: var(--color-light);
+            cursor: pointer; transition: all 0.3s;
+        }
+        #ark-sub-filter-bar .ark-sub-btn:hover { border-color: var(--color-accent); color: var(--color-accent); }
+        #ark-sub-filter-bar .ark-sub-btn.active { background: var(--color-accent); color: #fff; border-color: var(--color-accent); }
+        #ark-sub-filter-bar .ark-sub-btn.no-items { opacity: 0.45; border-style: dashed; }
+        #ark-sub-filter-bar .ark-sub-btn.no-items:hover { opacity: 0.7; }
+        #ark-sub-filter-bar .ark-sub-btn.no-items.active { opacity: 1; }
+        #ark-sub-filter-bar .ark-sub-btn .cnt {
+            display: inline-block; font-size: 8px; font-weight: 600;
+            background: rgba(0,0,0,0.06); color: var(--color-light);
+            padding: 1px 5px; margin-left: 5px; min-width: 14px; text-align: center;
+        }
+        #ark-sub-filter-bar .ark-sub-btn.active .cnt { background: rgba(255,255,255,0.2); color: #fff; }
+
+        /* Results count */
+        .ark-results-count {
+            text-align: center; margin-bottom: 32px;
+            font-size: 13px; color: var(--color-light); letter-spacing: 0.08em;
+        }
+        .ark-results-count strong { color: var(--color-fg); font-weight: 600; }
+
+        /* ===== SUB FILTER BAR ===== */
+        #arkSubFilterBar {
+            display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
+            margin: -32px auto 48px; max-width: 1200px; padding: 0 24px;
+            position: relative; z-index: 2;
+            transition: all 0.3s ease;
+        }
+        #arkSubFilterBar.ark-sub-hidden {
+            display: none !important;
+        }
+        #arkSubFilterBar .ark-sub-group {
+            display: none;
+            justify-content: center; gap: 8px; flex-wrap: wrap;
+            width: 100%;
+        }
+        #arkSubFilterBar .ark-sub-group.ark-active {
+            display: flex;
+        }
+        #arkSubFilterBar .ark-sub-filter-btn {
+            font-family: var(--font-body); font-size: 10px; font-weight: 500;
+            letter-spacing: var(--tracking); text-transform: uppercase;
+            padding: 8px 16px; border: 1px solid var(--color-border);
+            border-radius: var(--radius); background: var(--color-bg-cream);
+            color: var(--color-muted); cursor: pointer; transition: all 0.3s;
+        }
+        #arkSubFilterBar .ark-sub-filter-btn:hover {
+            border-color: var(--color-accent); color: var(--color-accent);
+        }
+        #arkSubFilterBar .ark-sub-filter-btn.active {
+            background: var(--color-accent); color: #fff; border-color: var(--color-accent);
+        }
+
+        /* ===== CARD GRID ===== */
+        .ark-listings-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 32px; max-width: 1200px; margin: 0 auto; padding: 0 24px 80px;
+        }
+
+        .ark-card {
+            background: #fff; border-radius: var(--radius); overflow: hidden;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.04); border: 1px solid var(--color-border);
+            transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+            position: relative; display: flex; flex-direction: column;
+        }
+        .ark-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+            border-color: var(--color-accent);
+        }
+        .ark-card.hidden { display: none; }
+
+        .ark-card-image {
+            height: 240px; position: relative; overflow: hidden; background: #f0ebe5;
+        }
+        .ark-card-image img {
+            width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;
+        }
+        .ark-card:hover .ark-card-image img { transform: scale(1.04); }
+
+        .ark-badge {
+            position: absolute; top: 16px; left: 16px;
+            font-family: var(--font-body); font-weight: 600; text-transform: uppercase;
+            font-size: 10px; letter-spacing: var(--tracking);
+            padding: 6px 16px; border-radius: var(--radius); z-index: 2;
+        }
+        .ark-badge.active-badge { background: var(--color-accent); color: #fff; }
+        .ark-badge.sold-badge { background: var(--color-sold); color: #fff; }
+
+        .ark-card-community {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.55));
+            padding: 28px 16px 10px; color: #fff; font-size: 10px;
+            letter-spacing: var(--tracking); text-transform: uppercase; font-weight: 500;
+        }
+
+        .ark-card-content {
+            padding: 22px 24px 24px; display: flex; flex-direction: column; flex-grow: 1;
+        }
+        .ark-card-price {
+            font-family: var(--font-heading);
+            font-size: 28px; font-weight: 600; color: var(--color-fg); margin-bottom: 4px;
+        }
+        .ark-card-address {
+            font-size: 14px; color: var(--color-muted); margin-bottom: 16px;
+            line-height: 1.4; font-weight: 400; flex-grow: 1;
+        }
+        .ark-card-specs {
+            display: flex; gap: 16px; border-top: 1px solid var(--color-border);
+            padding-top: 14px; margin-bottom: 20px; font-size: 13px; color: var(--color-muted);
+        }
+        .ark-card-specs strong { font-weight: 600; color: var(--color-fg); }
+
+        .ark-card-btn {
+            display: block; background: var(--color-accent); color: #fff;
+            text-align: center; text-decoration: none;
+            font-family: var(--font-body); font-weight: 500; font-size: 11px;
+            text-transform: uppercase; letter-spacing: var(--tracking);
+            padding: 14px; border-radius: var(--radius); transition: all 0.3s;
+        }
+        .ark-card-btn:hover { background: var(--color-fg); }
+
+        /* Empty state */
+        .ark-empty {
+            text-align: center; padding: 80px 30px;
+            border: 1px dashed var(--color-border); border-radius: var(--radius);
+            grid-column: 1 / -1; display: none; background: var(--color-bg-cream);
+        }
+        .ark-empty.visible { display: block; }
+        .ark-empty h3 {
+            font-family: var(--font-heading); font-size: 28px;
+            font-weight: 600; color: var(--color-fg); margin: 0 0 10px;
+        }
+        .ark-empty p { color: var(--color-muted); font-size: 15px; margin: 0 0 24px; }
+        .ark-empty-btn {
+            display: inline-block; background: var(--color-accent); color: #fff;
+            text-decoration: none; font-size: 11px; letter-spacing: var(--tracking);
+            text-transform: uppercase; padding: 14px 40px; font-weight: 500;
+            border-radius: var(--radius); transition: background 0.3s;
+        }
+        .ark-empty-btn:hover { background: var(--color-fg); }
+
+        /* Developer note */
+        .ark-dev-note {
+            max-width: 1200px; margin: 0 auto 60px; padding: 0 24px;
+        }
+        .ark-dev-note-inner {
+            background: #fffbeb; border: 1px dashed #d4a017; border-radius: 4px;
+            padding: 28px 32px;
+        }
+        .ark-dev-note-inner h3 {
+            font-family: var(--font-body); font-size: 13px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.15em;
+            color: #92680a; margin: 0 0 12px;
+        }
+        .ark-dev-note-inner p {
+            font-size: 13px; color: #6b5200; line-height: 1.7; margin: 0 0 8px;
+        }
+        .ark-dev-note-inner code {
+            background: rgba(0,0,0,0.06); padding: 2px 6px; border-radius: 3px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .ark-page-title { font-size: 32px; }
+            .ark-listings-grid { grid-template-columns: 1fr; }
+            .ark-filter-bar { margin-top: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="ark-listings-page">
+
+    <div class="ark-page-header">
+        <span class="ark-page-tag">Our Properties</span>
+        <h1 class="ark-page-title">Featured Listings</h1>
+        <p class="ark-page-desc">Hand-picked properties from ARK Real Estate. Each listing is personally curated by our team — from new construction to quick possessions across Calgary's best communities.</p>
+    </div>
+
+        <!-- Filter Bar -->
+    <div id="ark-filter-bar">
+        <button class="ark-fbtn active" data-f="all">All</button>
+        <button class="ark-fbtn" data-f="active">Active</button>
+        <button class="ark-fbtn" data-f="sold">Sold</button>
+        <button class="ark-fbtn" data-f="se-calgary" data-has-sub="se-calgary">SE Calgary</button>
+        <button class="ark-fbtn" data-f="ne-calgary" data-has-sub="ne-calgary">NE Calgary</button>
+        <button class="ark-fbtn" data-f="nw-calgary" data-has-sub="nw-calgary">NW Calgary</button>
+        <button class="ark-fbtn" data-f="sw-calgary" data-has-sub="sw-calgary">SW Calgary</button>
+        <button class="ark-fbtn" data-f="okotoks" data-has-sub="okotoks">Okotoks</button>
+    </div>
+
+    <!-- Sub Filter Bar -->
+    <div id="ark-sub-filter-bar" class="ark-sub-hidden">
+        <div class="ark-sub-group" id="sub-se-calgary">
+            <button class="ark-sub-btn" data-sf="heartwood">Heartwood</button>
+            <button class="ark-sub-btn" data-sf="hotchkiss">Hotchkiss</button>
+            <button class="ark-sub-btn" data-sf="mckenzie-towne">McKenzie Towne</button>
+        </div>
+        <div class="ark-sub-group" id="sub-ne-calgary">
+            <button class="ark-sub-btn" data-sf="homestead">Homestead</button>
+            <button class="ark-sub-btn" data-sf="keystone-creek">Keystone Creek</button>
+        </div>
+        <div class="ark-sub-group" id="sub-nw-calgary">
+            <button class="ark-sub-btn" data-sf="upper-greenwich">Upper Greenwich</button>
+            <button class="ark-sub-btn" data-sf="ambleton">Ambleton</button>
+        </div>
+        <div class="ark-sub-group" id="sub-sw-calgary">
+            <button class="ark-sub-btn" data-sf="vermilion-hill">Vermilion Hill</button>
+            <button class="ark-sub-btn" data-sf="pine-creek">Pine Creek</button>
+        </div>
+        <div class="ark-sub-group" id="sub-okotoks">
+            <button class="ark-sub-btn" data-sf="okotoks">Okotoks</button>
+        </div>
+    </div>
+
+    <div class="ark-results-count" id="resultsCount">Showing <strong>1</strong> listing</div>
+
+    <!-- Listings Grid -->
+    <div class="ark-listings-grid" id="listingsGrid">
+
+        <!-- 8 Ranchers Meadows -->
+        <div class="ark-card ark-active ark-okotoks ark-okotoks">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-8-ranchers-meadows-01.jpg" alt="8 Ranchers Meadows">
+                <div class="ark-card-community">Air Ranch · Okotoks</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$939,900</div>
+                <div class="ark-card-address">8 Ranchers Meadows, Okotoks</div>
+                <div class="ark-card-specs">
+                    <span><strong>4</strong> Beds</span>
+                    <span><strong>3.5</strong> Baths</span>
+                    <span><strong>3,057</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/8-ranchers-meadows/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 19 Wolf Crescent, Okotoks -->
+        <div class="ark-card ark-active ark-okotoks ark-okotoks">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-19-wolf-crescent-01.jpg" alt="19 Wolf Crescent">
+                <div class="ark-card-community">Wedderburn · Okotoks</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$598,000</div>
+                <div class="ark-card-address">19 Wolf Crescent, Okotoks, Alberta T1S5V1</div>
+                <div class="ark-card-specs">
+                    <span><strong>1 + 1</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,325</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/19-wolf-crescent/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 45 Hotchkiss Gardens SE -->
+        <div class="ark-card ark-active ark-se-calgary ark-hotchkiss">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-45-hotchkiss-gardens-01.jpg" alt="45 Hotchkiss Gardens SE">
+                <div class="ark-card-community">Hotchkiss · SE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$574,800</div>
+                <div class="ark-card-address">45 Hotchkiss Gardens SE, Calgary</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>2.5</strong> Baths</span>
+                    <span><strong>1,789</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/45-hotchkiss-gardens/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 14442 15 Street NE -->
+        <div class="ark-card ark-active ark-ne-calgary ark-keystone-creek">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-14442-15th-street-01.jpg" alt="14442 15 Street NE">
+                <div class="ark-card-community">Keystone Creek · NE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$530,000</div>
+                <div class="ark-card-address">14442 15 Street NE, Calgary</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>2.5</strong> Baths</span>
+                    <span><strong>1,348</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/14442-15th-street/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- #1213, 310 McKenzie Towne Gate SE -->
+        <div class="ark-card ark-active ark-se-calgary ark-mckenzie-towne">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-310-mckenzie-towne-gate-1213-01.jpg" alt="#1213, 310 McKenzie Towne Gate SE">
+                <div class="ark-card-community">McKenzie Towne · SE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$279,900</div>
+                <div class="ark-card-address">#1213, 310 McKenzie Towne Gate SE, Calgary</div>
+                <div class="ark-card-specs">
+                    <span><strong>1 + Den</strong> Beds</span>
+                    <span><strong>1</strong> Bath</span>
+                    <span><strong>781</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/310-mckenzie-towne-gate-1213/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 7134 Rangeview Avenue SE -->
+        <div class="ark-card ark-active ark-se-calgary ark-heartwood">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-7134-rangeview-avenue-01.jpg" alt="7134 Rangeview Avenue SE">
+                <div class="ark-card-community">Heartwood · SE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$449,900</div>
+                <div class="ark-card-address">7134 Rangeview Avenue SE, Calgary</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>2.5</strong> Baths</span>
+                    <span><strong>1,506</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/7134-rangeview-avenue/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+                        <!-- 278 Creekstone Hill SW -->
+        <div class="ark-card ark-active ark-sw-calgary ark-pine-creek">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-278-creekstone-hill-01.jpg" alt="278 Creekstone Hill SW">
+                <div class="ark-card-community">Pine Creek · SW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$947,800</div>
+                <div class="ark-card-address">278 Creekstone Hill SW, Calgary, Alberta T3P2V3</div>
+                <div class="ark-card-specs">
+                    <span><strong>4</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>2,646</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/278-creekstone-hill/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 101 Creekstone Hill SW -->
+        <div class="ark-card ark-active ark-sw-calgary ark-pine-creek">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-101-creekstone-hill-01.jpg" alt="101 Creekstone Hill SW">
+                <div class="ark-card-community">Pine Creek · SW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$842,800</div>
+                <div class="ark-card-address">101 Creekstone Hill SW, Calgary, Alberta T3P2V3</div>
+                <div class="ark-card-specs">
+                    <span><strong>2</strong> Beds</span>
+                    <span><strong>2</strong> Baths</span>
+                    <span><strong>1,425</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/101-creekstone-hill/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 131 Greenwich Drive NW -->
+        <div class="ark-card ark-active ark-nw-calgary ark-upper-greenwich">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-131-greenwich-drive-01.jpg" alt="131 Greenwich Drive NW">
+                <div class="ark-card-community">Upper Greenwich · NW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$759,211</div>
+                <div class="ark-card-address">131 Greenwich Drive NW, Calgary, Alberta T3B6K7</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>2,053</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/131-greenwich-drive/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 10 Versant Path SW -->
+        <div class="ark-card ark-active ark-sw-calgary ark-vermilion-hill">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-10-versant-path-01.jpg" alt="10 Versant Path SW">
+                <div class="ark-card-community">Vermilion Hill · SW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$699,800</div>
+                <div class="ark-card-address">10 Versant Path SW, Calgary, Alberta T2Y0Z5</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3 (2.5)</strong> Baths</span>
+                    <span><strong>1,680</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/10-versant-path/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 26 Versant Path SW -->
+        <div class="ark-card ark-active ark-sw-calgary ark-vermilion-hill">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-26-versant-path-01.jpg" alt="26 Versant Path SW">
+                <div class="ark-card-community">Vermilion Hill · SW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$699,800</div>
+                <div class="ark-card-address">26 Versant Path SW, Calgary, Alberta T2Y0Z4</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3 (2.5)</strong> Baths</span>
+                    <span><strong>1,780</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/26-versant-path/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 14 Versant Path SW -->
+        <div class="ark-card ark-active ark-sw-calgary ark-vermilion-hill">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-14-versant-path-01.jpg" alt="14 Versant Path SW">
+                <div class="ark-card-community">Vermilion Hill · SW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$655,800</div>
+                <div class="ark-card-address">14 Versant Path SW, Calgary, Alberta T2Y0Z5</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3 (2.5)</strong> Baths</span>
+                    <span><strong>1,796</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/14-versant-path/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 72 Amblefield View NW -->
+        <div class="ark-card ark-active ark-nw-calgary ark-ambleton">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-72-amblefield-view-01.jpg" alt="72 Amblefield View NW">
+                <div class="ark-card-community">Ambleton · NW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$629,800</div>
+                <div class="ark-card-address">72 Amblefield View NW, Calgary, Alberta T3P2L6</div>
+                <div class="ark-card-specs">
+                    <span><strong>3 Bedrooms</strong> Beds</span>
+                    <span><strong>3 Bathrooms</strong> Baths</span>
+                    <span><strong>1,742</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/72-amblefield-view/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 2112 152 Avenue NW -->
+        <div class="ark-card ark-active ark-nw-calgary ark-ambleton">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-2112-152-avenue-01.jpg" alt="2112 152 Avenue NW">
+                <div class="ark-card-community">Ambleton · NW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$612,800</div>
+                <div class="ark-card-address">2112 152 Avenue NW, Calgary, Alberta T3P2Y8</div>
+                <div class="ark-card-specs">
+                    <span><strong>4</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,580</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/2112-152-avenue/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 33 Hotchkiss Gardens SE -->
+        <div class="ark-card ark-active ark-se-calgary ark-hotchkiss">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-33-hotchkiss-gardens-01.jpg" alt="33 Hotchkiss Gardens SE">
+                <div class="ark-card-community">Hotchkiss · SE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$586,800</div>
+                <div class="ark-card-address">33 Hotchkiss Gardens SE, Calgary, Alberta T3S0T7</div>
+                <div class="ark-card-specs">
+                    <span><strong>3 Bedrooms</strong> Beds</span>
+                    <span><strong>3 Bathrooms (2.5 listed in description)</strong> Baths</span>
+                    <span><strong>1,779</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/33-hotchkiss-gardens/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 26 Ambleridge Avenue NW -->
+        <div class="ark-card ark-active ark-nw-calgary ark-ambleton">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-26-ambleridge-avenue-01.jpg" alt="26 Ambleridge Avenue NW">
+                <div class="ark-card-community">Ambleridge · NW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$565,221</div>
+                <div class="ark-card-address">26 Ambleridge Avenue NW, Calgary, Alberta T3P3G4</div>
+                <div class="ark-card-specs">
+                    <span><strong>4</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,578</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/26-ambleridge-avenue/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 174 Heartwood Parade SE -->
+        <div class="ark-card ark-active ark-se-calgary ark-heartwood">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-174-heartwood-parade-01.jpg" alt="174 Heartwood Parade SE">
+                <div class="ark-card-community">Heartwood · SE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$559,900</div>
+                <div class="ark-card-address">174 Heartwood Parade SE, Calgary, Alberta T2S0Z5</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,506</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/174-heartwood-parade/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 41 Hotchkiss Gardens SE -->
+        <div class="ark-card ark-active ark-se-calgary ark-hotchkiss">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-41-hotchkiss-gardens-01.jpg" alt="41 Hotchkiss Gardens SE">
+                <div class="ark-card-community">Hotchkiss · SE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$556,800</div>
+                <div class="ark-card-address">41 Hotchkiss Gardens SE, Calgary, Alberta T3S0T6</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,536</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/41-hotchkiss-gardens/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 98 Ambleridge Avenue NW -->
+        <div class="ark-card ark-active ark-nw-calgary ark-ambleton">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-98-ambleridge-avenue-01.jpg" alt="98 Ambleridge Avenue NW">
+                <div class="ark-card-community">Ambleridge · NW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$545,883</div>
+                <div class="ark-card-address">98 Ambleridge Avenue NW, Calgary, Alberta T3P3G4</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,682</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/98-ambleridge-avenue/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 14438 15 Street NE -->
+        <div class="ark-card ark-active ark-ne-calgary ark-keystone-creek">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-14438-15th-street-01.jpg" alt="14438 15 Street NE">
+                <div class="ark-card-community">Keystone Creek · NE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$545,000</div>
+                <div class="ark-card-address">14438 15 Street NE, Calgary, Alberta T3P2T1</div>
+                <div class="ark-card-specs">
+                    <span><strong>4 (3+1)</strong> Beds</span>
+                    <span><strong>4 (3.5)</strong> Baths</span>
+                    <span><strong>1,348</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/14438-15th-street/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 1644 Keystone Creek Avenue NE -->
+        <div class="ark-card ark-active ark-ne-calgary ark-keystone-creek">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-1644-keystone-creek-avenue-01.jpg" alt="1644 Keystone Creek Avenue NE">
+                <div class="ark-card-community">Keystone Creek · NE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$545,000</div>
+                <div class="ark-card-address">1644 Keystone Creek Avenue NE, Calgary, Alberta T3P2V3</div>
+                <div class="ark-card-specs">
+                    <span><strong>4</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,667</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/1644-keystone-creek-avenue/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 1632 Keystone Creek Avenue NE -->
+        <div class="ark-card ark-active ark-ne-calgary ark-keystone-creek">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-1632-keystone-creek-avenue-01.jpg" alt="1632 Keystone Creek Avenue NE">
+                <div class="ark-card-community">Keystone Creek · NE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$542,000</div>
+                <div class="ark-card-address">1632 Keystone Creek Avenue NE, Calgary, Alberta T3P2V3</div>
+                <div class="ark-card-specs">
+                    <span><strong>4</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,615</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/1632-keystone-creek-avenue/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 274 Keystone Creek Place NE -->
+        <div class="ark-card ark-active ark-ne-calgary ark-keystone-creek">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-274-keystone-creek-place-01.jpg" alt="274 Keystone Creek Place NE">
+                <div class="ark-card-community">Keystone Creek · NE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$525,000</div>
+                <div class="ark-card-address">274 Keystone Creek Place NE, Calgary, Alberta T3P2T4</div>
+                <div class="ark-card-specs">
+                    <span><strong>3</strong> Beds</span>
+                    <span><strong>3 (2.5)</strong> Baths</span>
+                    <span><strong>1,490</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/274-keystone-creek-place/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- 8456 Homestead Avenue NE -->
+        <div class="ark-card ark-active ark-ne-calgary ark-homestead">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-8456-homestead-avenue-01.jpg" alt="8456 Homestead Avenue NE">
+                <div class="ark-card-community">Homestead · NE Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$524,999</div>
+                <div class="ark-card-address">8456 Homestead Avenue NE, Calgary, Alberta T3J5V3</div>
+                <div class="ark-card-specs">
+                    <span><strong>4</strong> Beds</span>
+                    <span><strong>3</strong> Baths</span>
+                    <span><strong>1,561</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/8456-homestead-avenue/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- Unit 4102, 100 Banister Drive -->
+        <div class="ark-card ark-active ark-okotoks ark-okotoks">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-4102-100-banister-drive-01.jpg" alt="Unit 4102, 100 Banister Drive">
+                <div class="ark-card-community">Wedderburn · Okotoks</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$357,021</div>
+                <div class="ark-card-address">4102, 100 Banister Drive, Okotoks, Alberta T1S5Y2</div>
+                <div class="ark-card-specs">
+                    <span><strong>2</strong> Beds</span>
+                    <span><strong>2</strong> Baths</span>
+                    <span><strong>744</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/4102-100-banister-drive/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- Unit 3306, 100 Banister Drive -->
+        <div class="ark-card ark-active ark-okotoks ark-okotoks">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-3306-100-banister-drive-01.jpg" alt="Unit 3306, 100 Banister Drive">
+                <div class="ark-card-community">Wedderburn · Okotoks</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$278,046</div>
+                <div class="ark-card-address">3306, 100 Banister Drive, Okotoks, Alberta T1S5Y4</div>
+                <div class="ark-card-specs">
+                    <span><strong>1</strong> Bed</span>
+                    <span><strong>1</strong> Bath</span>
+                    <span><strong>478</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/3306-100-banister-drive/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+        <!-- Unit 2203, 9655 Bowfort Road NW -->
+        <div class="ark-card ark-active ark-nw-calgary ark-upper-greenwich">
+            <div class="ark-badge active-badge">Active</div>
+            <div class="ark-card-image">
+                <img src="/resources/featured-images/ark-featured-2203-9655-bowfort-road-01.jpg" alt="Unit 2203, 9655 Bowfort Road NW">
+                <div class="ark-card-community">Upper Greenwich · NW Calgary</div>
+            </div>
+            <div class="ark-card-content">
+                <div class="ark-card-price">$245,700</div>
+                <div class="ark-card-address">2203, 9655 Bowfort Road NW, Calgary, Alberta T3B5X4</div>
+                <div class="ark-card-specs">
+                    <span><strong>1</strong> Bed</span>
+                    <span><strong>1</strong> Bath</span>
+                    <span><strong>529</strong> Sq Ft</span>
+                </div>
+                <a href="/featured-listing/2203-9655-bowfort-road/" class="ark-card-btn">View Listing</a>
+            </div>
+        </div>
+
+
+<!-- Empty State -->
+        <div class="ark-empty" id="emptyState">
+            <h3>New listings coming soon — get in touch</h3>
+            <p>Our team is always sourcing new properties. Contact us for early access to upcoming listings.</p>
+            <a href="/contact/" class="ark-empty-btn">Get in Touch</a>
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+<script>
+(function(){
+    var labels = {
+        'all':'All Communities','active':'Active Listings','sold':'Sold Listings',
+        'se-calgary':'SE Calgary','ne-calgary':'NE Calgary','nw-calgary':'NW Calgary','sw-calgary':'SW Calgary','okotoks':'Okotoks',
+        'heartwood':'Heartwood','hotchkiss':'Hotchkiss','homestead':'Homestead',
+        'keystone-creek':'Keystone Creek','vermilion-hill':'Vermilion Hill',
+        'upper-greenwich':'Upper Greenwich','mckenzie-towne':'McKenzie Towne',
+        'ambleton':'Ambleton','pine-creek':'Pine Creek'
+    };
+
+    function init(){
+        var bar=document.getElementById('ark-filter-bar');
+        var subBar=document.getElementById('ark-sub-filter-bar');
+        var res=document.getElementById('resultsCount');
+        if(!bar) return;
+        var tabs=bar.querySelectorAll('.ark-fbtn');
+        var subBtns=subBar?subBar.querySelectorAll('.ark-sub-btn'):[];
+        var subGroups=subBar?subBar.querySelectorAll('.ark-sub-group'):[];
+        var cards=document.querySelectorAll('.ark-card');
+        var empty=document.getElementById('arkEmptyState');
+        var emH=empty?empty.querySelector('h3'):null;
+
+        function countFor(v){
+            var n=0;cards.forEach(function(c){
+                if(v==='all')n++;
+                else if(v==='active'||v==='sold'){if(c.classList.contains('ark-'+v))n++;}
+                else{if(c.classList.contains('ark-'+v))n++;}
+            });return n;
+        }
+        
+        tabs.forEach(function(t){
+            var oldSpans = t.querySelectorAll('.cnt');
+            oldSpans.forEach(function(s){ s.remove(); });
+            var v=t.getAttribute('data-f'),n=countFor(v);
+            var b=document.createElement('span');b.className='cnt';b.textContent=n;t.appendChild(b);
+            if(n===0)t.classList.add('no-items');
+            else t.classList.remove('no-items');
+        });
+        subBtns.forEach(function(s){
+            var oldSpans = s.querySelectorAll('.cnt');
+            oldSpans.forEach(function(x){ x.remove(); });
+            var sf=s.getAttribute('data-sf'),n=countFor(sf);
+            var b=document.createElement('span');b.className='cnt';b.textContent=n;s.appendChild(b);
+            if(n===0)s.classList.add('no-items');
+            else s.classList.remove('no-items');
+        });
+        
+        function filter(v){
+            var n=0;
+            cards.forEach(function(c){
+                var show=v==='all'||(v==='active'||v==='sold'?c.classList.contains('ark-'+v):c.classList.contains('ark-'+v));
+                if(show){c.classList.remove('hidden');c.style.display = '';n++;}else{c.classList.add('hidden');c.style.display = 'none';}
+            });
+            if(res)res.innerHTML='Showing <strong>'+n+'</strong> '+(n===1?'listing':'listings');
+            if(empty){if(n===0){empty.classList.add('visible');if(emH)emH.textContent='No listings in '+(labels[v]||v)+' yet — get in touch';}else{empty.classList.remove('visible');}}
+        }
+        
+        tabs.forEach(function(t){t.addEventListener('click',function(){
+            tabs.forEach(function(x){x.classList.remove('active');});this.classList.add('active');
+            var subId = this.getAttribute('data-has-sub');
+            if(subBar && subId){
+                subBar.classList.remove('ark-sub-hidden');
+                subGroups.forEach(function(g){
+                    if(g.id === 'sub-' + subId) g.classList.add('ark-active');
+                    else g.classList.remove('ark-active');
+                });
+                subBtns.forEach(function(s){s.classList.remove('active');});
+            } else if(subBar){
+                subBar.classList.add('ark-sub-hidden');
+                subGroups.forEach(function(g){g.classList.remove('ark-active');});
+            }
+            filter(this.getAttribute('data-f'));
+        });});
+        
+        subBtns.forEach(function(s){s.addEventListener('click',function(){
+            var group = this.closest('.ark-sub-group');
+            if(group) group.querySelectorAll('.ark-sub-btn').forEach(function(x){x.classList.remove('active');});
+            this.classList.add('active');
+            filter(this.getAttribute('data-sf'));
+        });});
+        filter('all');
+    }
+    if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){setTimeout(init,100);});
+    else setTimeout(init,100);
+})();
+</script>
+</body>
+</html>
